@@ -1,0 +1,46 @@
+
+%Convert a vector to BFP. Results returned as [X, P] where
+% X is the scale factor as P is Block floating vector
+
+
+function result = BlockConvert(V, MX) 
+
+
+%Takes inputs (Vector to convert, MX to specify format)
+
+%based off algorithm on page 15 of OCP spec
+
+%Set X to largest power of 2 less than maximum value in vector
+[max_val, ~] = max(abs(V));
+E = floor(log2(max_val));
+
+%largest element power of 2
+[~, opts] = cpfloat(pi, MX.element_opts);
+maxEx
+
+
+%Set scale factor
+X = 2^E;
+
+
+%Divide all elements by the scale factor
+P = V / X ;
+
+%Convert numbers exceding max to max possible? 
+
+ maxE5M2 = 57344;  % Largest finite E5M2 number
+
+ % Clamp magnitude and preserve sign
+ P = min(abs(P), maxE5M2) .* sign(V);
+
+
+
+%Convert number of bits being used
+result.scale = X;
+result.vector = cpfloat(P, MX.element_opts); 
+
+
+
+end
+
+

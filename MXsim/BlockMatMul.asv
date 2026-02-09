@@ -1,0 +1,53 @@
+function result = BlockMatMul(A, B, MX)
+%BLOCKMATMUL Multiplies two matricies using custom precision 
+%and OCP MX  method. 
+%
+%   Input two matricies A and B, such that A and B are 
+%   multiplicable. 
+%
+%   The third argument (MX), allows for customisable precision 
+%   and block size. 
+%
+%   MX.scale corresponds to the datatype of X, the scale factor. 
+%   MX.vector corresponds to the data type of the Private elements
+%   MX.k corresponds to the block size k, and must be set to 
+%     a positive integer.
+%   MX.accumulate lets you customise the accumulation precision
+%
+%   MX.scale and MX.vector can be individually customised via 
+%   CP float. Use command 'help cpfloat' to see all available 
+%   options. 
+%   
+%   Example: Set Private element datatype to E5M2 by setting 
+%   MX.vector.format = 'E5M2'
+% 
+
+
+
+% Get sizes
+[m, nA] = size(A);
+[nB, p] = size(B);
+    
+% Check if multiplicable
+if nA ~= nB
+    error('Matrix dimensions must agree: size(A,2) must equal size(B,1).');
+end
+  
+%Set up result matrix
+result = zeros(m, p);
+
+
+for i = 1:m
+        for j = 1:p
+            % Row i of A, column j of B
+            rowA = A(i, :);
+            colB = B(:, j)';
+            
+            result(i, j) = GeneralDot(rowA, colB, MX);
+        end
+    end
+end
+
+
+
+end
