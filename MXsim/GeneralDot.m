@@ -32,33 +32,19 @@ function result = GeneralDot(A, B, MX)
 % 
 
 
-A = A(:); %makes A and B row vectors regardless of input format
-B = B(:);
 
-k = MX.k; 
 result = 0;
-n = length(A);
-
-% Pad the vectors A and B to make their lengths a multiple of k
-if mod(n,k) ~= 0
-    padSize = k - mod(n, k);
-    A = [A; zeros(padSize, 1)];
-    B = [B; zeros(padSize, 1)];
-
-end
-
-n = length(A) / k; %n will be number of MX vectors
 
 
-%Separate k sized blocks
-A = reshape(A,k, []);
-B = reshape(B, k, []);
+n = length(A) / MX.k; %n will be number of MX vectors
 
+AMX = MXconvert(A,MX);
+BMX = MXconvert(B,MX);
 
 
 % Compute the dot product for each block
 for i = 1 : n 
-    result = result + BlockDot(A(:,i), B(:, i), MX); 
+    result = result + BlockDot(AMX{i}, BMX{i}, MX); 
     % Uses BlockDot function on each vector of k elements
     % And sums them together
 

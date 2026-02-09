@@ -6,23 +6,19 @@ function result = BlockDot(A,B, MX)
 
 
 % A and B are vectors of length k, where k is the block size
-
-xblock = BlockConvert(A, MX); 
-yblock = BlockConvert(B, MX);
-
 %formula from page 14 ocp spec
 
 
 %multiply scale factors
-scaleFactor = (xblock.scale * yblock.scale);
+scaleFactor = (A.scale * B.scale);
 
 
-k = length(xblock.vector);
+k = length(A.vector);
 dotProduct = 0; 
 
 for i = 1: k;
 
-    product = xblock.vector(i) * yblock.vector(i);
+    product = A.vector(i) * B.vector(i);
 
     product = cpfloat(product, MX.accumulator_opts);
 
