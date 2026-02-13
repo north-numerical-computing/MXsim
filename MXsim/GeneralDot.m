@@ -36,10 +36,11 @@ function result = GeneralDot(A, B, MX)
 result = 0;
 
 
-n = length(A) / MX.k; %n will be number of MX vectors
 
 AMX = MXconvert(A,MX);
 BMX = MXconvert(B,MX);
+
+n = length(AMX);
 
 
 % Compute the dot product for each block
