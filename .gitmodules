@@ -1,0 +1,3 @@
+[submodule "cpfloat"]
+	path = cpfloat
+	url = https://github.com/north-numerical-computing/cpfloat
