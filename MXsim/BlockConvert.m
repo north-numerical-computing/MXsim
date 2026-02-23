@@ -13,7 +13,7 @@ V= V(:);
     %based off algorithm on page 15 of OCP spec
     
     %Set X to largest power of 2 less than maximum value in vector
-    [max_val, ~] = max(abs(V));
+    [max_val, ~] = max(abs(V(~isnan(V)))); %Ignore NaNs
     E = floor(log2(max_val));
     
     [~, opts] = cpfloat(pi, MX.element_opts);
