@@ -74,13 +74,13 @@ ans =
 #### Accumulation Precision
 The accumulation Precision for the general dot product between two vectors is not specified by OCP. Hence, the accumulation precision has been made customisable. 
 
-### Accumulation Method
+#### Accumulation Method
 Accumulation is performed recursively by default. 
 
-### NaNs
+#### NaNs
 When converting to MX, if a vector contains NaNs, they are ignored when computing the scale and their corresponding values remain as NaNs. This allows vectors containing NaNs to be converted to MX. However, performing a general dot product with a vector containing NaNs will result in a NaN. 
 
-### MX Conversion 
+#### MX Conversion 
 A function named MXconvert is included, which goes beyond the OCP specified conversion algorithm. The OCP method exclusively converts a vector containing a single block and scale factor. Although the exact OCP algorithm is included as the function BlockConvert, the function MX convert is also included. This function will convert a vector of any length to MX, and return a structure containing multiple block vectors and their corresponding scales. 
 
 
