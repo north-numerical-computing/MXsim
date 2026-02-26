@@ -27,22 +27,28 @@ V= V(:);
     %Divide all elements by the scale factor
     P = V / X ;
     
-    %Convert numbers exceding max to max possible? 
+
+   
+
     
     % Special treatment for the maximum value of fp8-e4m3, as per the
     % OFP8 format specification.
     if (strcmp(MX.element_opts.format, 'E4M3'))
-        fmax = 2^emax*(2-4*u);
-    else
-        fmax = 2^emax*(2-2*u);
+        fmax = 248;
+        P = min(abs(P), fmax) .* sign(V);
     end
     
-     % Clamp magnitude and preserve sign
-     P = min(abs(P), fmax) .* sign(V);
 
     %Convert number of bits being used
     result.scale = X;
-    result.vector = cpfloat(P, MX.element_opts); 
+
+
+    Format = MX.element_opts;
+    Format.saturation = 1; 
+    % Using saturated version will clamp the magnitudes to the maximum
+
+    result.vector = cpfloat(P, Format); 
+    
 end
 
 
