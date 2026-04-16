@@ -32,6 +32,14 @@ function result = GeneralDot(A, B, MX)
 % 
 
 
+arguments
+    A       {mustBeNumeric}
+    B       {mustBeNumeric}
+    MX    = default_MX()
+end 
+
+
+
 
 result = 0;
 
