@@ -16,16 +16,22 @@ scaleFactor = (A.scale * B.scale);
 k = length(A.vector);
 dotProduct = 0; 
 
+%Calculate products
 for i = 1: k;
 
     product = A.vector(i) * B.vector(i);
 
     product = cpfloat(product, MX.accumulator_opts);
 
+    disp (product);
+
     dotProduct = dotProduct + product;
     dotProduct = cpfloat(dotProduct, MX);
 
+    disp(dotProduct);
+
     fmt = MX.accumulator_opts.format;
+
 
 if isinf(dotProduct)
     switch fmt
@@ -51,9 +57,5 @@ end
 end
 result = cpfloat((scaleFactor*dotProduct), MX.output_opts);
 
-%Add pairs and multiply by scale
 
 end
-
-
-%Measure the error as you increase and decrease the precision 

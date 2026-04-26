@@ -22,6 +22,9 @@ function result = GeneralDot(A, B, MX)
 %     a positive integer.
 %   MX.accumulator_opts lets you customise the accumulation precision
 %   MX.output_opts customises output precision
+%   MX.scale_bits customises the bits in the shared scale
+%
+%   If a field is not set, it is defaulted to its value in MXE4M3
 %
 %   MX.element_opts, MX.output_opts and MX.accumulator_opts can be individually customised via 
 %   CP float. Use command 'help cpfloat' to see all available 
@@ -35,9 +38,9 @@ function result = GeneralDot(A, B, MX)
 arguments
     A       {mustBeNumeric}
     B       {mustBeNumeric}
-    MX    = default_MX()
+    MX    = struct()
 end 
-
+MX = merge_MX(MX);
 
 
 

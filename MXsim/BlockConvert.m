@@ -2,10 +2,11 @@
 
 function result = BlockConvert(V, MX) 
 arguments
-    V       {mustBeNumeric}
-    MX    = default_MX()
-end 
+    V   {mustBeNumeric}
+    MX  = struct()
+end
 
+MX = merge_MX(MX);
 
 V= V(:);
 
