@@ -1,11 +1,4 @@
 
-%To do
-%Take inputs in MX formats
-
-
-
-
-
 function result = GeneralDot(A, B, MX)
 
 %GENERALDOT section 6.2 OCP MX spec
