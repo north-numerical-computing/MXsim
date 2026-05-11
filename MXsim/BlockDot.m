@@ -23,12 +23,9 @@ for i = 1: k;
 
     product = cpfloat(product, MX.accumulator_opts);
 
-    disp (product);
-
     dotProduct = dotProduct + product;
     dotProduct = cpfloat(dotProduct, MX);
 
-    disp(dotProduct);
 
     fmt = MX.accumulator_opts.format;
 

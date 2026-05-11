@@ -26,9 +26,8 @@ end
     %based off algorithm on page 15 of OCP spec
     
     %Set X to largest power of 2 less than maximum value in vector
-    [max_val, ~] = max(abs((V))); %Ignore NaNs
+    [max_val, ~] = max(abs((V))); 
     E = floor(log2(max_val));
-
     [~, opts] = cpfloat(pi, MX.element_opts);
 
     %Largest power of 2 in datatype, not just largest exponent 
@@ -40,6 +39,8 @@ end
 
     u = 2^-opts.params(1);
     E = E-emax;
+
+    
 
     %Set scale factor
     X = 2^E;
