@@ -5,7 +5,7 @@
 clear; clc;
 rng(500) % Initialise RNG seed so results are reproducible
 vecLength = 32;          % BlockDot operates on one block
-numTrials = 1000;        % Number of random tests
+numTrials = 100000;        % Number of random tests
 maxVal    = 1e4;
 elFormats = {'E4M3', 'E5M2'};
 removeInputError = 1;    % Set to 0 to keep binary64 inputs
@@ -72,7 +72,7 @@ for elIdx = 1:numel(elFormats)
         % ---------------------------------
         % ERROR BOUND
         % (n-1) * u * sum(|a_i * b_i|)
-        % Computed in double for accuracy
+        % Page 82, eq 4.4
         % ---------------------------------
         bounds(trial, elIdx) = (n - 1) * u * sum(abs(double(a) .* double(b)));
 

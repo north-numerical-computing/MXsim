@@ -74,6 +74,7 @@ for lenIdx = 1:numel(vecLengths)
             % ERROR BOUND
             % term1: error summing n block results
             % term2: error within blocks
+            % Derived from BlockDot bound and eq 4.4
             % ---------------------------------
             blockDots = zeros(n, 1);
             for j = 1:n
