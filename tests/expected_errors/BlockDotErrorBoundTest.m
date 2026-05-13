@@ -35,51 +35,49 @@ B = maxVal * (2*rand(vecLength, numTrials) - 1);
 % LOOP OVER ELEMENT FORMATS
 % -----------------------------
 for elIdx = 1:numel(elFormats)
-    MX.element_opts.format = elFormats{elIdx};
+   MX.element_opts.format = elFormats{elIdx};
+   for trial = 1:numTrials
+      % Extract vectors
+      a = A(:, trial);
+      b = B(:, trial);
+      % ---------------------------------
+      % REMOVE INPUT ERROR
+      % ---------------------------------
+      if removeInputError
+         MXa = MXconvert(a, MX);
+         a   = MXconvert_inv(MXa, vecLength);
+         MXb = MXconvert(b, MX);
+         b   = MXconvert_inv(MXb, vecLength);
+      end
 
-    for trial = 1:numTrials
-        % Extract vectors
-        a = A(:, trial);
-        b = B(:, trial);
+      % ---------------------------------
+      % CONVERT TO MX BLOCKS
+      % ---------------------------------
+      AMX = MXconvert(a, MX);
+      BMX = MXconvert(b, MX);
 
-        % ---------------------------------
-        % REMOVE INPUT ERROR
-        % ---------------------------------
-        if removeInputError
-            MXa = MXconvert(a, MX);
-            a   = MXconvert_inv(MXa, vecLength);
-            MXb = MXconvert(b, MX);
-            b   = MXconvert_inv(MXb, vecLength);
-        end
+      % BlockDot expects one Block
+      result = BlockDot(AMX{1}, BMX{1}, MX);
 
-        % ---------------------------------
-        % CONVERT TO MX BLOCKS
-        % ---------------------------------
-        AMX = MXconvert(a, MX);
-        BMX = MXconvert(b, MX);
+      %Use built in dot for double precision dot product
+      trueVal = dot(double(a), double(b));
 
-        % BlockDot expects one Block
-        result = BlockDot(AMX{1}, BMX{1}, MX);
+      % ---------------------------------
+      % ABSOLUTE ERROR
+      % ---------------------------------
+      absErrors(trial, elIdx) = abs(double(result) - trueVal);
 
+      % ---------------------------------
+      % ERROR BOUND
+      % (n-1) * u * sum(|a_i * b_i|)
+      % Page 82, eq 4.4, Accuracy and Stability of Numerical Algorithms
+      % ---------------------------------
+      bounds(trial, elIdx) = (n - 1) * u * sum(abs(double(a) .* double(b)));
 
-        trueVal = dot(double(a), double(b));
-
-        % ---------------------------------
-        % ABSOLUTE ERROR
-        % ---------------------------------
-        absErrors(trial, elIdx) = abs(double(result) - trueVal);
-
-        % ---------------------------------
-        % ERROR BOUND
-        % (n-1) * u * sum(|a_i * b_i|)
-        % Page 82, eq 4.4
-        % ---------------------------------
-        bounds(trial, elIdx) = (n - 1) * u * sum(abs(double(a) .* double(b)));
-
-        % ---------------------------------
-        % PASS/FAIL
-        % ---------------------------------
-        passed(trial, elIdx) = absErrors(trial, elIdx) <= bounds(trial, elIdx);
+      % ---------------------------------
+      % PASS/FAIL
+      % ---------------------------------
+      passed(trial, elIdx) = absErrors(trial, elIdx) <= bounds(trial, elIdx);
     end
 
     % ---------------------------------
