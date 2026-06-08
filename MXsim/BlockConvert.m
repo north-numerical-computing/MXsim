@@ -40,14 +40,19 @@ function result = BlockConvert(V, MX)
   %Divide all elements by the scale factor
   P = V / X ;
   
-  % Special treatment for the maximum value of fp8-e4m3, as per the
-  % OFP8 format specification.
-  if (strcmp(MX.element_opts.format, 'E4M3'))
-     fmax = 448;
-     P = min(abs(P), fmax) .* sign(V);
+  % Manually handle OCP-correct maxVal for E4M3.
+  if strcmpi(MX.element_opts.format, 'E4M3')
+    if MX.element_opts.saturation
+        % Clamp to OCP max of 448.
+        P = max(-448, min(448, P));
+    else
+        % Values between 448 and 480 should overflow to infinity.
+        P(P > 448) = inf;
+        P(P < -448) = -inf;
+    end
   end
  
-  %Convert number of bits being used
+  % Convert number of bits being used
   result.scale = X;
   result.vector = cpfloat(P, MX.element_opts); 
 end
