@@ -3,62 +3,63 @@ BFP Simulator
 This repository simulates OCP MX formats, as specified in [1], as well as custom formats following the MX structure. 
 
 The toolbox can simulate the multiplication of two vectors or matrices with the following custom parameters: 
-* Element datatype
+* Element format
 * Block size
-* Accumulation precision
-* Output precision
+* Accumulation format
+* Output format
 
-When a vector is converted to a chosen BFP format, it is stored as a structure, containing an array of block vectors and their corresponding scales. The elements of each block vector simulate low precision, via [CPFloat](https://github.com/north-numerical-computing/cpfloat). The accumulation and output precision also simulate the chosen format using CPFloat. 
+When a vector is converted to a chosen BFP format, it is stored as a structure, containing an array of block vectors and their corresponding scales. The elements of each block vector simulate low precision, via [CPFloat](https://github.com/north-numerical-computing/cpfloat). The accumulation and output format also simulate the chosen format using CPFloat. 
 
 
 ## Dependencies and Installation 
-1. Install [CPFloat](https://github.com/north-numerical-computing/cpfloat), the custom floating point precision simulator.
+1. Install [CPFloat](https://github.com/north-numerical-computing/cpfloat), the custom floating point format simulator.
 2. Add [MXsim/](MXsim/) to MATLAB search path. 
 
 ## Configuration
-The custom datatype must first be set by defining a structure with the required fields. The element, accumulation and output precision may be set to any datatype on that CPFloat supports. The following example shows the configuration for simulating MXFP8 (E5M2) formats, with a double output and FP32 accumulation. 
+The custom format must first be set by defining a structure with the required fields. The element, accumulation and output format may be set to any format that CPFloat supports. The following example shows the configuration for simulating MXFP8 (E5M2) formats, with a output in FP16 (binary16 IEEE 754 format) and accumulation in FP32 (binary32 IEEE format). 
 ```console
 MX.element_opts.format = 'E5M2'; % Set element datatype to E5M2
 MX.k = 32; % Set block size to 32
 MX.accumulator_opts.format = 's'; % Set accumulation format to FP32 (single precision)
-MX.output_opts.format = 'd'; % Set output format to FP64 (double precision)
+MX.output_opts.format = 'h'; % Set output format to FP16 (half precision)
 ```
 
 ## Examples
 
-Here's an example GeneralDot usage, computing the dot product of two double precision vectors of size 10^4, using the MX format configuration described above.
- The configuration in the above section was used. 
+Here's an example GeneralDot usage, computing the dot product of two FP64 (binary64 IEEE 754 format) vectors of size 10^4, using the MX format configuration described above.
 ```console
 >> rng(500);
 
-%Choose two random vectors 
-A = (rand(10^4,1) - 0.5) * 2 * 10^4;
-B = (rand(10^4,1) - 0.5) * 2 * 10^4;
+% Choose two random vectors 
+A = (rand(10^4,1) - 0.5) * 2 ;
+B = (rand(10^4,1) - 0.5) * 2 ;
 
 >> GeneralDot(A,B,MX)
 
+
 ans =
 
-   -60685376
+    4.4375
+
 ```
 Below is an example of BlockMatMul usage with the same configuration.
 ```console
->> C = (rand(8,8) - 0.5) * 2 * 10^4;
->> D = (rand(8,8) - 0.5) * 2 * 10^4;
+>> C = (rand(8,8) - 0.5) * 2 ;
+>> D = (rand(8,8) - 0.5) * 2 ;
 
 >> BlockMatMul(C,D,MX)
 
+
 ans =
 
-  -200278016    12550144   -54853632   104660992    20316160    92798976   -56885248    41680896
-   -47120384    -1933312   -15204352    -4849664   -16777216   -28114944    70254592    24297472
-     7110656    38621184    23580416   -23683072   -87117824    78557184   -19804160   -84746240
-    45350912  -132579328   -17956864    34209792   151912448   239861760   -17039360   -10158080
-    77332480   -13828096    -1572864   -43122688   -30801920   -40108032    49020928    -8847360
-   -72876032    38338560   -74711040   -28704768  -159514624     3670016   -14221312  -158597120
-    20447232   108331008   153649152    57933824   -31129600     5505024   -36831232    -2818048
-   148897792    72941568   135790592   -76152832    -2097152  -158334976    63176704    74186752
-
+   -1.8018    0.8389   -1.9756   -1.9824    0.2939   -0.2362    0.3037    0.8809
+   -0.3083    0.3704    0.8760   -0.1753    1.1543   -1.8662    0.0464    0.5381
+   -2.1914    1.0625   -0.4531   -1.3789   -0.7656    1.0420    1.0859    1.8750
+    0.0049    0.7988   -2.2500   -0.0273   -0.1914    1.1719   -0.9546   -1.2188
+   -1.3203    0.0870   -1.9531   -1.3379    1.3154    0.7729   -1.0371    1.1367
+   -1.0273    0.3818    0.3584   -1.1426    1.0957   -2.2422    0.2588    0.8477
+   -0.2285    0.3354    0.8691   -0.3086   -0.4189    0.2656    0.0293   -0.2266
+    0.7773    1.1338   -0.0391    1.7812    1.1875   -1.2617   -0.1084   -0.5000
 
 ```
 
@@ -72,10 +73,14 @@ ans =
 
 ### OCP Unspecified Aspects
 #### Accumulation Precision
-The accumulation Precision for the general dot product between two vectors is not specified by OCP. Hence, the accumulation precision has been made customisable. 
+The accumulation format for the general dot product between two vectors is not specified by OCP. Hence, the accumulation format has been made customisable. 
 
 #### Accumulation Method
-Accumulation is performed recursively by default. 
+Accumulation within BlockDot is performed recursively, converting to the accumulation format at each step. The accumulation method is left implementation defined by OCP. BlockDot computes the dot product of a pair of single blocks. 
+
+GeneralDot accumulates BlockDot results recursively, converting to the output precision at each step. 
+
+
 
 #### NaNs
 When converting to MX, if a vector contains NaNs, they are ignored when computing the scale and their corresponding values remain as NaNs. This allows vectors containing NaNs to be converted to MX. However, performing a general dot product with a vector containing NaNs will result in a NaN. 
@@ -92,6 +97,4 @@ A function named MXconvert is included, which goes beyond the OCP specified conv
 
 
 ## References
-[1] Open Compute Project Foundation. OCP microscaling formats (mx) specification. Technical report, Open Compute Project, 2023. URL https://www.opencompute.org/
-documents/ocp-microscaling-formats-mx-specification.
-
+[1] Open Compute Project Foundation. OCP microscaling formats (MX) specification. Technical report, Open Compute Project, 2023. URL https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf
