@@ -10,6 +10,6 @@ function result = backwardsConvert(A)
 %     A.scale  - shared scale factor for the block.
 %
 
-result = (a.scale*a.vector); 
+result = (A.scale*A.vector); 
 
 end
