@@ -1,8 +1,33 @@
 
 
 function result = BlockConvert(V, MX) 
- %Takes inputs (Vector to convert, MX to specify format) 
- %based off algorithm on page 15 of OCP spec
+% BLOCKCONVERT Converts a single block vector to OCP MX format.
+%
+%   RESULT = BLOCKCONVERT(V, MX) converts the input vector V to MX
+%   format using the configuration specified in MX. The conversion
+%   follows the algorithm specified in Section 6.3 of the OCP MX
+%   specification. The shared scale factor X is set to the largest
+%   power of two less than or equal to the maximum absolute value in
+%   V, divided by the largest power of two representable in the element
+%   format. The elements are then divided by X and rounded to the
+%   element format specified by MX.element_opts.
+%
+%   V must be a numeric vector of length MX.k. If V contains any NaN
+%   values, RESULT.scale is set to NaN and RESULT.vector is set to a
+%   vector of NaNs.
+%
+%   For the E4M3 format, the maximum representable value is corrected
+%   to 448 as specified by OCP, overriding the value of 480 computed
+%   by CPFloat. If saturation is enabled, values exceeding 448 are
+%   clamped. If saturation is disabled, values between 448 and 480
+%   are mapped to infinity.
+%
+%   RESULT is a structure with fields:
+%     RESULT.scale  - shared scale factor X.
+%     RESULT.vector - vector of private elements of length MX.k.
+%
+
+
  arguments
     V   {mustBeNumeric}
     MX  = struct()

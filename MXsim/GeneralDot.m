@@ -1,7 +1,7 @@
 
 function result = GeneralDot(A, B, MX)
  %GENERALDOT section 6.2 OCP MX spec
- %Calculates the OCP defined General Dot product in custom 
+ % RESULT = GENERALDOT(A, B, MX) calculates the OCP defined General Dot product in custom 
  %precision. 
  %
  %   A and B must be vectors of equal length

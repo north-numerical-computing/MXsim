@@ -70,6 +70,8 @@ ans =
 * MX vectors are stored as a set of k sized blocks with their corresponding shared scales, as specified on page 9 of the MX specification.
 * Conversion of a k sized vector to MX follows the algorithm specified on page 15. This is implemented as the function BlockConvert.
 * The basic operations specified on page 14 and 15 are supported. Section 6.1 mentions the dot product between two MX compliant blocks, which is implemented as the function BlockDot. The general dot product specified in section 6.2 is implemented as the function GeneralDot. 
+* CPFloat is used to convert element datatypes to OCP E5M2 and E4M3. NaNs and infinities are represented correctly by CPFLoat. The max value for E4M3 in CPFloat is 480, whereas the OCP specified max value is 448. Therefore, this has been corrected within the toolbox when the element format is E4M3. 
+
 
 ### OCP Unspecified Aspects
 #### Accumulation Precision

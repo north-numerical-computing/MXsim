@@ -2,8 +2,25 @@
 
 
 function result = BlockDot(A,B, MX)
- % A and B are vectors of length k, where k is the block size
- %formula from page 14 ocp spec
+% BLOCKDOT Computes the dot product of two single MX format blocks.
+%
+%   RESULT = BLOCKDOT(A, B, MX) computes the dot product of two MX
+%   blocks A and B, as defined in Section 6.1 of the OCP MX
+%   specification. The shared scale factors of A and B are multiplied
+%   together, and the sum of products of the private elements is
+%   accumulated recursively in the precision specified by
+%   MX.accumulator_opts. The result is rounded to the output precision
+%   specified by MX.output_opts.
+%
+%   A and B must be structures in MX block format, with fields:
+%     A.vector, B.vector - private element vectors of length MX.k.
+%     A.scale,  B.scale  - shared scale factors.
+%
+%   MX is a configuration struct. If a field is not set, it defaults to
+%   its value in MXE4M3. Use 'help cpfloat' to see available format
+%   options.
+%
+
 
  %multiply scale factors
  scaleFactor = (A.scale * B.scale);
