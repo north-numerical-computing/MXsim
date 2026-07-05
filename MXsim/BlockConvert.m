@@ -12,9 +12,10 @@ function result = BlockConvert(V, MX)
 %   format. The elements are then divided by X and rounded to the
 %   element format specified by MX.element_opts.
 %
-%   V must be a numeric vector of length MX.k. If V contains any NaN
-%   values, RESULT.scale is set to NaN and RESULT.vector is set to a
-%   vector of NaNs.
+%   V must be a numeric vector of length MX.k. If V contains NaN values, 
+%   the shared scale is computed from the non-NaN elements. NaN positions 
+%   are preserved in the output vector. If all elements are NaN, 
+%   RESULT.scale is set to NaN and RESULT.vector is set to a vector of NaNs.
 %
 %   For the E4M3 format, the maximum representable value is corrected
 %   to 448 as specified by OCP, overriding the value of 480 computed
@@ -33,18 +34,27 @@ function result = BlockConvert(V, MX)
     MX  = struct()
  end
 
- MX = merge_MX(MX);
- V= V(:);
+  MX = merge_MX(MX);
+  V= V(:);
+  
+  % Handle zero vector.
+  if all(V == 0)
+     result.scale  = 1;
+     result.vector = zeros(size(V));
+     return
+  end
 
- % If input contains any NaN, return NaN vector and NaN scale
- if any(isnan(V)) 
-    result.scale  = NaN;
-    result.vector = NaN(size(V));
-    return
- end
+
+  % Compute scale from finite non-NaN values only.
+  finiteVals = V( ~isnan(V));
+  if isempty(finiteVals)
+     result.scale  = NaN;
+     result.vector = NaN(size(V));
+     return
+  end
     
   %Set X to largest power of 2 less than maximum value in vector
-  [max_val, ~] = max(abs((V))); 
+  [max_val, ~] = max(abs((finiteVals))); 
   E = floor(log2(max_val));
 
   %Divide by largest power of 2 in element datatype
@@ -55,7 +65,7 @@ function result = BlockConvert(V, MX)
   
   %Clamp exponent to max
   max_exponent = 2^(MX.scale_bits - 1) - 1;
-  if E > max_exponent; 
+  if E > max_exponent 
      E = max_exponent; 
   end 
 
@@ -71,9 +81,9 @@ function result = BlockConvert(V, MX)
         % Clamp to OCP max of 448.
         P = max(-448, min(448, P));
     else
-        % Values between 448 and 480 should overflow to infinity.
-        P(P > 448) = inf;
-        P(P < -448) = -inf;
+        % Values between 448 and 480 should overflow to NaN.
+        P(P > 448) = NaN;
+        P(P < -448) = NaN;
     end
   end
  
