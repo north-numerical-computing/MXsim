@@ -77,6 +77,7 @@ function result = BlockConvert(V, MX)
   
   % Manually handle OCP-correct maxVal for E4M3.
   if strcmpi(MX.element_opts.format, 'E4M3')
+    nanPos = isnan(P);
     if MX.element_opts.saturation
         % Clamp to OCP max of 448.
         P = max(-448, min(448, P));
@@ -85,6 +86,7 @@ function result = BlockConvert(V, MX)
         P(P > 448) = NaN;
         P(P < -448) = NaN;
     end
+    P(nanPos) = NaN;  % Restore NaN positions
   end
  
   % Convert number of bits being used
