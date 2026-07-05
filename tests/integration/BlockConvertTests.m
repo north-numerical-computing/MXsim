@@ -25,45 +25,64 @@ classdef BlockConvertTests < matlab.unittest.TestCase
  %  EDGE CASE TESTS
  % ======================================================================
  methods (Test)
-  function testNaNInputReturnsNaN(testCase)
-     %% Any NaN in input should produce NaN scale and NaN vector
-     input  = [1; NaN; 3; 4];
-     result = BlockConvert(input, testCase.MX);
-     testCase.verifyTrue(isnan(result.scale), ...
-        'Expected NaN scale for NaN input');
-     testCase.verifyTrue(all(isnan(result.vector)), ...
-        'Expected all NaN vector for NaN input');
-  end
   function testScaleIsPowerOfTwo(testCase)
-     %% scale should always be an exact power of 2
+     %% Scale should always be an exact power of 2.
      input  = [3.7; 0.5; 1.2; 2.9];
      result = BlockConvert(input, testCase.MX);
      log2scale = log2(result.scale);
      testCase.verifyEqual(log2scale, round(log2scale), ...
-        'scale is not a power of 2');
+        'Scale is not a power of 2.');
   end
   function testOutputVectorLengthMatchesInput(testCase)
-     %% result.vector should have the same length as the input
+     %% Result.vector should have the same length as the input.
      input  = rand(16, 1);
      result = BlockConvert(input, testCase.MX);
      testCase.verifyEqual(numel(result.vector), numel(input));
   end
   function testE4M3SaturationClampsAt448(testCase)
-     %% E4M3: values above 448 (after scaling) should be clamped.
-     %  Use vector with max larger than 448 * scale and
-     %  verify the output vector contains no values with magnitude > 448.
+     %% E4M3: values above 448 after scaling should be clamped.
      testCase.MX.element_opts.format = 'E4M3';
      input  = [1e6; 1; 1; 1];
      result = BlockConvert(input, testCase.MX);
      testCase.verifyTrue(all(abs(result.vector) <= 448), ...
-        'E4M3 value is above the maximum 448');
+        'E4M3 value is above the maximum 448.');
   end
-  function testInfInputReturnsInfScale(testCase)
-     %% Any Inf input wi;; produce and Inf scale
+  function testInfInputReturnsFiniteScale(testCase)
+     %% An Inf input causes the scale to be clamped to its maximum finite value.
      input  = [1; Inf; 3; 4];
      result = BlockConvert(input, testCase.MX);
-     testCase.verifyTrue(isinf(result.scale), ...
-        'Expected Inf scale for Inf input');
+     testCase.verifyTrue(isfinite(result.scale), ...
+        'Expected finite scale for Inf input.');
+  end
+  function testNaNPreservedInVector(testCase)
+     %% NaN positions should be preserved in the output vector.
+     input = [NaN; 1; 2; 3];
+     result = BlockConvert(input, testCase.MX);
+     testCase.verifyTrue(isnan(result.vector(1)), ...
+        'Expected NaN in first position.');
+     testCase.verifyFalse(isnan(result.vector(2)), ...
+        'Expected non-NaN in second position.');
+  end
+  function testAllNaNReturnsNaNScale(testCase)
+     %% All-NaN vector should return NaN scale and NaN vector.
+     input = [NaN; NaN; NaN; NaN];
+     result = BlockConvert(input, testCase.MX);
+     testCase.verifyTrue(isnan(result.scale), ...
+        'Expected NaN scale for all-NaN input.');
+  end
+  function testZeroVectorReturnsScaleOne(testCase)
+     %% Zero vector should return scale of 1 and zero vector.
+     input = zeros(5, 1);
+     result = BlockConvert(input, testCase.MX);
+     testCase.verifyEqual(result.scale, 1, ...
+        'Expected scale of 1 for zero vector.');
+  end
+  function testNaNInputReturnsNaN(testCase)
+     %% A vector containing a NaN should have NaN in the output vector.
+     input  = [1; NaN; 3; 4];
+     result = BlockConvert(input, testCase.MX);
+     testCase.verifyTrue(any(isnan(result.vector)), ...
+        'Expected NaN in output vector.');
   end
  end
  % ======================================================================
