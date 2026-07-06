@@ -1,7 +1,21 @@
 % -----------------------------
 % Test Relative Error vs Element Format
+% VaryingElements.m
+%
+% This script tests how the relative error of GeneralDot varies with
+% vector length n, for E4M3 and E5M2 element formats, using binary32
+% accumulation.
+%
+% Input error is removed by converting to MX and back before computing
+% the dot product, isolating the accumulation error from the
+% quantisation error. The reference value is computed in binary64.
+%
+% The theoretical bound nu is plotted, where n is the vector length
+% and u = 2^-24 is the unit roundoff for binary32. This bound is
+% derived from standard backward error analysis for recursive
+% summation (Higham 2002, eq. 4.4). Actual errors are expected to
+% fall below this bound.
 % -----------------------------
-
 clear; clc;
 rng(500) % Initialise RNG seed so the results are reproducible
 
@@ -46,16 +60,12 @@ for elIdx = 1:numel(elFormats)
             b = MXconvert_inv(MXb, n);
         end
 
-        
-       
         % Compute dot product using GeneralDot
         result = GeneralDot(a, b, MX);
 
-        
         % Reference dot product (full double precision)
         trueVal = dot(a, b);
 
-        
         if trueVal ~= 0
             errors(nIdx, elIdx) = abs(result - trueVal) / abs(trueVal);
         else
@@ -76,7 +86,15 @@ end
 xlabel('Vector length n');
 ylabel('Relative error');
 title('Relative Error of GeneralDot vs True Dot for Different Element Formats');
+
+
+% Add theoretical single precision accumulation bound.
+theoreticalBound = nVals * 2^-24;
+semilogy(nVals, theoreticalBound, 'r--', 'DisplayName', 'Theoretical bound (nu)');
+
+xlabel('Vector length n');
+ylabel('Relative error');
+title('Relative Error of GeneralDot vs True Dot for Different Element Formats');
 legend('show');
 grid on;
-
-set(gca,'XScale','log'); % log scale for vector length
+set(gca,'XScale','log');

@@ -50,13 +50,14 @@ classdef BlockDotTests < matlab.unittest.TestCase
  % ======================================================================
  methods (Test)
   function test1(testCase)
-     input1.vector  = [0.125 14 176 416];
-     input1.scale = [8];
-     input2.vector = [-384 256 -1 104 -224];
-     input2.scale = [16];
-     expected = 3674112;
-     result = BlockDot(input1,input2, testCase.MX);
-     testCase.verifyEqual(result,  expected);
+    % Hand computed dot product of two E4M3 blocks.
+    input1.vector = [0.125; 14; 176; 416];
+    input1.scale  = [8];
+    input2.vector = [-384; 256; -1; 104];
+    input2.scale  = [16];
+    expected      = 5967872;
+    result        = BlockDot(input1, input2, testCase.MX);
+    testCase.verifyEqual(result, expected);
   end
  end
-end
+end 

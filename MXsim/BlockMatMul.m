@@ -1,8 +1,8 @@
 function result = BlockMatMul(A, B, MX)
- %BLOCKMATMUL Multiplies two matricies using custom precision 
+ %BLOCKMATMUL Multiplies two matrices using custom precision 
  %and OCP MX  method. 
  %
- %   Input two matricies A and B, such that A and B are 
+ %   Input two matrices A and B, such that A and B are 
  %   multiplicable. 
  %
  %   The third argument (MX), allows for customisable precision 
@@ -32,7 +32,7 @@ function result = BlockMatMul(A, B, MX)
     error('Matrix dimensions must agree: size(A,2) must equal size(B,1).');
  end
  
- %Set up result matrix
+ % Set up result matrix
  result = zeros(m, p);
 
  for i = 1:m

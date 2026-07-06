@@ -1,5 +1,3 @@
-
-
 function result = BlockConvert(V, MX) 
 % BLOCKCONVERT Converts a single block vector to OCP MX format.
 %
@@ -93,5 +91,3 @@ function result = BlockConvert(V, MX)
   result.scale = X;
   result.vector = cpfloat(P, MX.element_opts); 
 end
-
-

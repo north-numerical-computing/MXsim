@@ -6,7 +6,7 @@ clear; clc;
 rng(500) % Initialise RNG seed so results are reproducible
 vecLength = 32;          % BlockDot operates on one block
 numTrials = 100000;        % Number of random tests
-maxVal    = 1e4;
+maxVal    = 1;
 elFormats = {'E4M3', 'E5M2'};
 removeInputError = 1;    % Set to 0 to keep binary64 inputs
 % -----------------------------

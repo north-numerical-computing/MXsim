@@ -27,9 +27,9 @@ function result = MXconvert(V,MX)
     V = [V; zeros(padSize, 1)];
  end 
 
- n = length(V) / k; %n will be number of MX vectors
+ n = length(V) / k; % n will be number of MX vectors.
 
- %Separate k sized blocks
+ % Separate k sized blocks.
  V = reshape(V,k, []);
 
  for i = 1 : n 

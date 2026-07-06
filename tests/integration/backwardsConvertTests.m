@@ -99,5 +99,25 @@ classdef backwardsConvertTests < matlab.unittest.TestCase
      result   = backwardsConvert(a);
      testCase.verifyEqual(numel(result), 32);
   end
+  % ==================================================================
+  %  NaN HANDLING
+  % ==================================================================
+  function testNaNScaleReturnsNaN(testCase)
+     % NaN scale should return a vector of NaNs.
+     a.scale  = NaN;
+     a.vector = [1; 2; 3; 4];
+     result   = backwardsConvert(a);
+     testCase.verifyTrue(all(isnan(result)), ...
+        'Expected all NaNs for NaN scale.');
+  end
+
+  function testNaNInVectorReturnsNaN(testCase)
+     % NaN in vector should propagate to output.
+     a.scale  = 2;
+     a.vector = [1; NaN; 3; 4];
+     result   = backwardsConvert(a);
+     testCase.verifyTrue(isnan(result(2)), ...
+        'Expected NaN in output for NaN in vector.');
+  end
  end
 end

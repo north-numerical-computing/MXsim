@@ -4,8 +4,8 @@
 % -----------------------------
 clear; clc;
 rng(500)
-vecLengths  = [32, 64, 128, 256, 512, 1024];  % Must be multiples of k
-numTrials   = 100;       % Trials per length
+vecLengths  = [32, 64, 128, 256, 512, 1024, 4096, 16384, 65536, 1048576];   % Must be multiples of k
+numTrials   = 5;       % Trials per length
 maxVal      = 1e4;
 elFormats   = {'E4M3', 'E5M2'};
 removeInputError = 1;

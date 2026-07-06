@@ -91,8 +91,20 @@ When converting to MX, if a vector contains NaNs, they are ignored when computin
 A function named MXconvert is included, which goes beyond the OCP specified conversion algorithm. The OCP method exclusively converts a vector containing a single block and scale factor. Although the exact OCP algorithm is included as the function BlockConvert, the function MX convert is also included. This function will convert a vector of any length to MX, and return a structure containing multiple block vectors and their corresponding scales. 
 
 
+## Tests
 
+The simulator includes a test suite located in the `tests/` directory. 
+Tests can be run from MATLAB using:
 
+```matlab
+runalltests
+```
+
+### Integration tests
+Integration tests are located in `tests/integration/` and verify the correctness of the core functions `BlockConvert`, `BlockDot`, `MXconvert`, and `backwardsConvert` against hand-computed values and edge cases.
+
+### Error bound tests
+Error bound tests are located in `tests/expected_errors/` and verify that the results of `BlockDot`, `GeneralDot`, and `BlockMatMul` fall within theoretical error bounds derived from standard backward error analysis for recursive summation.
 
 
 

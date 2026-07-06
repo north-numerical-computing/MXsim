@@ -1,6 +1,3 @@
-
-
-
 function result = BlockDot(A,B, MX)
 % BLOCKDOT Computes the dot product of two single MX format blocks.
 %
@@ -15,21 +12,20 @@ function result = BlockDot(A,B, MX)
 %   A and B must be structures in MX block format, with fields:
 %     A.vector, B.vector - private element vectors of length MX.k.
 %     A.scale,  B.scale  - shared scale factors.
-%
 %   MX is a configuration struct. If a field is not set, it defaults to
 %   its value in MXE4M3. Use 'help cpfloat' to see available format
 %   options.
 %
 
 
- %multiply scale factors
+ % Multiply scale factors.
  scaleFactor = (A.scale * B.scale);
 
  k = length(A.vector);
  dotProduct = 0; 
 
- %Calculate products
- for i = 1: k;
+ % Calculate products.
+ for i = 1: k
     product = A.vector(i) * B.vector(i);
     product = cpfloat(product, MX.accumulator_opts);
     dotProduct = dotProduct + product;
