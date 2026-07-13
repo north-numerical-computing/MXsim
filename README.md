@@ -13,7 +13,7 @@ When a vector is converted to a chosen BFP format, it is stored as a structure, 
 
 ## Dependencies and Installation 
 1. Install [CPFloat](https://github.com/north-numerical-computing/cpfloat), the custom floating point format simulator.
-2. Add [MXsim/](simulator/) to MATLAB search path. 
+2. Add [simulator/](simulator/) to MATLAB search path. 
 
 ## Configuration
 The custom format must first be set by defining a structure with the required fields. The element, accumulation and output format may be set to any format that CPFloat supports. The following example shows the configuration for simulating MXFP8 (E5M2) formats, with a output in FP16 (binary16 IEEE 754 format) and accumulation in FP32 (binary32 IEEE format). 
