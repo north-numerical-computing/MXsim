@@ -13,7 +13,7 @@ When a vector is converted to a chosen BFP format, it is stored as a structure, 
 
 ## Dependencies and Installation 
 1. Install [CPFloat](https://github.com/north-numerical-computing/cpfloat), the custom floating point format simulator.
-2. Add [MXsim/](MXsim/) to MATLAB search path. 
+2. Add [MXsim/](simulator/) to MATLAB search path. 
 
 ## Configuration
 The custom format must first be set by defining a structure with the required fields. The element, accumulation and output format may be set to any format that CPFloat supports. The following example shows the configuration for simulating MXFP8 (E5M2) formats, with a output in FP16 (binary16 IEEE 754 format) and accumulation in FP32 (binary32 IEEE format). 
@@ -93,7 +93,7 @@ A function named MXconvert is included, which goes beyond the OCP specified conv
 
 ## Tests
 
-The simulator includes a test suite located in the `tests/` directory. 
+The simulator includes a testing section located in the `tests/` directory. 
 Tests can be run from MATLAB using:
 
 ```matlab
@@ -104,7 +104,7 @@ runalltests
 Integration tests are located in `tests/integration/` and verify the correctness of the core functions `BlockConvert`, `BlockDot`, `MXconvert`, and `backwardsConvert` against hand-computed values and edge cases.
 
 ### Error bound tests
-Error bound tests are located in `tests/expected_errors/` and verify that the results of `BlockDot`, `GeneralDot`, and `BlockMatMul` fall within theoretical error bounds derived from standard backward error analysis for recursive summation.
+Error bound tests are located in `tests/expected_errors/` and verify that the results of `BlockDot`, `GeneralDot`, and `BlockMatMul` fall within theoretical error bounds.
 
 
 
