@@ -1,6 +1,6 @@
 % ----- Add toolbox root to path-----
 repo_root = fileparts(fileparts(mfilename('fullpath')));
-addpath(fullfile(repo_root, 'MXsim'));
+addpath(fullfile(repo_root, 'simulator'));
  
 % ----- Discover all tests in this folder and subfolders -----
 suite = matlab.unittest.TestSuite.fromFolder( ...
