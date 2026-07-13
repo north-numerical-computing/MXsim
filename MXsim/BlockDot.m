@@ -29,8 +29,8 @@ function result = BlockDot(A,B, MX)
     product = A.vector(i) * B.vector(i);
     product = cpfloat(product, MX.accumulator_opts);
     dotProduct = dotProduct + product;
-    dotProduct = cpfloat(dotProduct, MX);
-    fmt = MX.accumulator_opts.format;
+    dotProduct = cpfloat(dotProduct, MX.accumulator_opts);
+
     
  end
  result = cpfloat((scaleFactor*dotProduct), MX.output_opts);
