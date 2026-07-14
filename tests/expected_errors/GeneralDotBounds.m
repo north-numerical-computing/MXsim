@@ -6,7 +6,7 @@
 clear; clc;
 rng(500)
 
-vecLengths = [32, 64, 128, 256, 512, 1024, 4096, 16384, 65536, 262144, 1048576];
+vecLengths = round(logspace(4,6,7));
 numTrials  = 5;
 maxVal     = 1;
 elFormats  = {'E4M3', 'E5M2'};
@@ -87,7 +87,7 @@ for lenIdx = 1:numel(vecLengths)
             end
             outerBound = (numBlocks - 1) * u * outerBound;
 
-            innerBound = (k - 1) * u * sum(abs(double(a) .* double(b)));
+            innerBound = (numBlocks - 1) * u *(k - 1) * u * sum(abs(double(a) .* double(b)));
 
             boundVal = outerBound + innerBound;
 
@@ -113,7 +113,7 @@ for lenIdx = 1:numel(vecLengths)
 end
 
 % -----------------------------
-% REPORT
+
 % -----------------------------
 fprintf('\n--- Summary ---\n');
 for elIdx = 1:numel(elFormats)
@@ -127,11 +127,10 @@ end
 % -----------------------------
 % PLOT: Worst-Case + Mean Error vs Bound
 % -----------------------------
-figure;
 colors = lines(numel(elFormats));
 
 for elIdx = 1:numel(elFormats)
-    subplot(1, numel(elFormats), elIdx);
+    figure;
     hold on;
 
     loglog(vecLengths, meanBounds(:, elIdx),  'ks-',  'DisplayName', 'Bound (mean)');
@@ -144,11 +143,7 @@ for elIdx = 1:numel(elFormats)
     title(sprintf('GeneralDot Error vs Bound: %s', elFormats{elIdx}));
     legend show;
     grid on;
-    set(gca, 'XScale', 'log');
-    set(gca, 'YScale', 'log');
+    set(gca, 'XScale', 'log', 'YScale', 'log');
+    axis square;          % square plot box
     hold off;
-end
-
-function y = worstBoundsFallback(x)
-    y = x;
 end
