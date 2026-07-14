@@ -116,4 +116,5 @@ Error bound tests are located in `tests/expected_errors/` and verify that the re
 
 ## References
 [1] Open Compute Project Foundation. OCP microscaling formats (MX) specification. Technical report, Open Compute Project, 2023. URL https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf
+
 [2] Simulation of Custom-Precision OCP MX Block Floating-Point Formats and Arithmetic. M. Islam and M. Mikaitis. July, 2026. In preparation.
