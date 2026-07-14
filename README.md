@@ -1,4 +1,4 @@
-BFP Simulator
+MXsim: OCP floating-point arithmetic simulator
 --
 This repository simulates OCP MX formats, as specified in [1], as well as custom formats following the MX structure. 
 
