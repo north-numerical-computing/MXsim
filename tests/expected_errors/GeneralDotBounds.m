@@ -83,7 +83,7 @@ for lenIdx = 1:numel(vecLengths)
 
             outerBound = 0;
             for j = 1:numBlocks
-                outerBound = outerBound + abs(BlockDot(AMX{j}, BMX{j}, MX));
+                outerBound = outerBound + abs(AMX{j}.scale * BMX{j}.scale *dot(double(AMX{j}.vector), double(BMX{j}.vector)));
             end
             outerBound = (numBlocks - 1) * u * outerBound;
 
