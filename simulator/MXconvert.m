@@ -16,8 +16,12 @@ function result = MXconvert(V,MX)
 %   its value in MXE4M3. Use 'help cpfloat' to see available format
 %   options for MX.element_opts.
 
+arguments
+    V   {mustBeNumeric}
+    MX  = struct()
+end
 
-
+ MX = merge_MX(MX);
  V= V(:);
  k = MX.k;
  n = length(V);
