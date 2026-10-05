@@ -1,4 +1,4 @@
-BFP Simulator
+MXsim: OCP floating-point arithmetic simulator
 --
 This repository simulates OCP MX formats, as specified in [1], as well as custom formats following the MX structure. 
 
@@ -7,6 +7,8 @@ The toolbox can simulate the multiplication of two vectors or matrices with the 
 * Block size
 * Accumulation format
 * Output format
+
+The software is described in the paper [2].
 
 When a vector is converted to a chosen BFP format, it is stored as a structure, containing an array of block vectors and their corresponding scales. The elements of each block vector simulate low precision, via [CPFloat](https://github.com/north-numerical-computing/cpfloat). The accumulation and output format also simulate the chosen format using CPFloat. 
 
@@ -114,3 +116,5 @@ Error bound tests are located in `tests/expected_errors/` and verify that the re
 
 ## References
 [1] Open Compute Project Foundation. OCP microscaling formats (MX) specification. Technical report, Open Compute Project, 2023. URL https://www.opencompute.org/documents/ocp-microscaling-formats-mx-v1-0-spec-final-pdf
+
+[2] Simulation of Custom-Precision OCP MX Block Floating-Point Formats and Arithmetic. M. Islam and M. Mikaitis. July, 2026. In preparation.
