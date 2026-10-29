@@ -42,10 +42,8 @@ function result = BlockConvert(V, MX)
      return
   end
 
-
-  % Compute scale from finite non-NaN values only.
-  finiteVals = V( ~isnan(V));
-  if isempty(finiteVals)
+  % if any nans or infinities are present, scale and vector all become nan
+  if any(isnan(V)) || any(isinf(V))
      result.scale  = NaN;
      result.vector = NaN(size(V));
      return
