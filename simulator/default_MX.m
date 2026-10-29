@@ -12,5 +12,6 @@ function MX = default_MX()
     MX.output_opts.format      = 's';
     MX.k                       = 32;  % block size
     MX.scale_bits = 8;
+    MX.expAdj = 0;
 
 end

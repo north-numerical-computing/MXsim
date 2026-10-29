@@ -59,7 +59,7 @@ function result = BlockConvert(V, MX)
   [~, opts] = cpfloat(pi, MX.element_opts);
   emax = opts.params(3);
   u = 2^-opts.params(1);
-  E = E-emax;
+  E = (E-emax) + MX.expAdj;
   
   %Clamp exponent to max
   max_exponent = 2^(MX.scale_bits - 1) - 1;
