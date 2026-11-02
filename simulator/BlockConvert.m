@@ -50,7 +50,7 @@ function result = BlockConvert(V, MX)
   end
     
   %Set X to largest power of 2 less than maximum value in vector
-  [max_val, ~] = max(abs((finiteVals))); 
+  [max_val, ~] = max(abs((V))); 
   E = floor(log2(max_val));
 
   %Divide by largest power of 2 in element datatype
@@ -59,11 +59,10 @@ function result = BlockConvert(V, MX)
   u = 2^-opts.params(1);
   E = (E-emax) + MX.expAdj;
   
-  %Clamp exponent to max
+  % Clamp exponent to the representable range of the scale
   max_exponent = 2^(MX.scale_bits - 1) - 1;
-  if E > max_exponent 
-     E = max_exponent; 
-  end 
+  min_exponent = -max_exponent;
+  E = min(max(E, min_exponent), max_exponent);
 
   %Set scale factor
   X = 2^E;
